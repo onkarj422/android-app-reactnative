@@ -1,42 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View, ToolbarAndroid, StatusBar, Platform, ViewPagerAndroid } from 'react-native';
 import { Provider } from 'react-redux';
+import { store, persistor} from './src/redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { AppNavigation } from './src/navigator/AppNavigation';
+import { uiTheme } from './customization/theme';
+import { ThemeContext, getTheme } from 'react-native-material-ui';
 
 export default class App extends React.Component {
   render() {
     return (
-      <View>
-        <ToolbarAndroid style={styles.statusBar}>
-          <StatusBar translucent={true}></StatusBar>
-        </ToolbarAndroid>
-        <ToolbarAndroid style={styles.toolbar} title="React Native">
-        </ToolbarAndroid>
-        <ViewPagerAndroid>
-
-        </ViewPagerAndroid>
-      </View>
+      <Provider store={store}>
+        <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
+          <ThemeContext.Provider value={getTheme(uiTheme)}>
+            <AppNavigation>
+            </AppNavigation>
+          </ThemeContext.Provider>
+        </PersistGate>
+      </Provider>
     );
   }
 }
-//
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff'
-  },
-  toolbar: {
-    backgroundColor: 'powderblue',
-    height: 80
-  },
-  statusBar: {
-    height: StatusBar.currentHeight,
-    backgroundColor: 'skyblue'
-  },
-  viewPager: {
-    flex: 1
-  },
-  pageStyle: {
-    alignItems: 'center',
-    padding: 20,
-  }
-});
